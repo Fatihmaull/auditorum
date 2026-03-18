@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Design Tokens
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@layer base {
+  body {
+    @apply bg-dark font-sans text-white antialiased;
+  }
+
+  ::selection {
+    @apply bg-accent/30;
+  }
+
+  /* Override wallet adapter modal styles */
+  .wallet-adapter-modal-wrapper {
+    @apply !bg-dark-50;
+  }
+}
+
+@layer components {
+  /* Shared card style */
+  .card {
+    @apply rounded-2xl border border-white/[0.06] bg-dark-50 p-6;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-dark transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/10 active:translate-y-0;
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium text-white/80 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white;
+  }
+
+  /* Accent button */
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-dark hover:shadow-lg hover:shadow-accent/20 active:translate-y-0;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-xs font-medium text-accent-light;
+  }
+
+  /* Section container */
+  .section {
+    @apply mx-auto max-w-5xl px-6;
+  }
+
+  /* Status indicator dot */
+  .status-dot {
+    @apply h-2 w-2 rounded-full;
+  }
+
+  .status-dot-success {
+    @apply status-dot bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.4)];
+  }
+
+  .status-dot-error {
+    @apply status-dot bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.4)];
+  }
+
+  .status-dot-pending {
+    @apply status-dot animate-pulse bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)];
+  }
+}
+
+/* ============================================================
+   Glow effect
+   ============================================================ */
+.glow {
+  position: relative;
+}
+
+.glow::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(79, 110, 247, 0.12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
