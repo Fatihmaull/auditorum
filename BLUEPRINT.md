@@ -71,15 +71,15 @@ Auditorum fills this gap.
 ┌──────────────────────────────────────────────────────────────────┐
 │                    AUDITORUM PROTOCOL FLOW                       │
 │                                                                  │
-│  1. ISSUE        2. ANCHOR        3. SHARE        4. VERIFY     │
+│  1. ISSUE        2. ANCHOR        3. SHARE        4. VERIFY      │
 │  ┌─────────┐    ┌───────────┐    ┌──────────┐    ┌───────────┐  │
 │  │ Auditor │───▶│  Solana   │───▶│ Enterprise│──▶│  Verifier │  │
-│  │ uploads │    │ on-chain  │    │ shares   │    │  checks   │  │
-│  │ report  │    │ hash +    │    │ report + │    │  hash     │  │
-│  │         │    │ metadata  │    │ proof ID │    │  match    │  │
-│  └─────────┘    └───────────┘    └──────────┘    └───────────┘  │
+│  │ uploads │    │ on-chain  │    │ shares   │    │  checks   │   │
+│  │ report  │    │ hash +    │    │ report + │    │  hash     │   │
+│  │         │    │ metadata  │    │ proof ID │    │  match    │   │
+│  └─────────┘    └───────────┘    └──────────┘    └───────────┘   │
 │                                                                  │
-│  Report stays OFF-CHAIN.  Only the hash goes ON-CHAIN.          │
+│  Report stays OFF-CHAIN.  Only the hash goes ON-CHAIN.           │
 └──────────────────────────────────────────────────────────────────┘
 ```
 

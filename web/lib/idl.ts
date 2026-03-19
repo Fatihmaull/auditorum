@@ -1,86 +1,160 @@
-/**
- * Anchor IDL type definition for auditorum_protocol.
- *
- * This is a TypeScript representation of what `anchor build` generates.
- * It allows the frontend to construct transactions without running anchor build.
- */
-
 export type AuditorumProtocol = {
-  version: "0.1.0";
+  version: "0.2.0";
   name: "auditorum_protocol";
   instructions: [
     {
-      name: "createAuditRecord";
+      name: "initialize";
       accounts: [
-        { name: "auditRecord"; isMut: true; isSigner: false },
-        { name: "authority"; isMut: true; isSigner: true },
+        { name: "globalState"; isMut: true; isSigner: false },
+        { name: "signer"; isMut: true; isSigner: true },
+        { name: "systemProgram"; isMut: false; isSigner: false }
+      ];
+      args: [];
+    },
+    {
+      name: "createWorkspace";
+      accounts: [
+        { name: "globalState"; isMut: true; isSigner: false },
+        { name: "workspace"; isMut: true; isSigner: false },
+        { name: "admin"; isMut: true; isSigner: true },
+        { name: "systemProgram"; isMut: false; isSigner: false }
+      ];
+      args: [{ name: "companyName"; type: "string" }];
+    },
+    {
+      name: "assignAuditor";
+      accounts: [
+        { name: "globalState"; isMut: false; isSigner: false },
+        { name: "workspace"; isMut: false; isSigner: false },
+        { name: "auditorAssignment"; isMut: true; isSigner: false },
+        { name: "admin"; isMut: true; isSigner: true },
+        { name: "auditor"; isMut: false; isSigner: false },
         { name: "systemProgram"; isMut: false; isSigner: false }
       ];
       args: [
-        { name: "hash"; type: { array: ["u8", 32] } },
-        { name: "industry"; type: "u8" },
-        { name: "role"; type: "u8" }
+        { name: "firmPubkey"; type: "publicKey" },
+        { name: "expiry"; type: "i64" }
       ];
-    }
-  ];
-  accounts: [
+    },
     {
-      name: "AuditRecord";
-      type: {
-        kind: "struct";
-        fields: [
-          { name: "authority"; type: "publicKey" },
-          { name: "hash"; type: { array: ["u8", 32] } },
-          { name: "industry"; type: "u8" },
-          { name: "role"; type: "u8" },
-          { name: "createdAt"; type: "i64" },
-          { name: "bump"; type: "u8" }
-        ];
-      };
+      name: "uploadDocument";
+      accounts: [
+        { name: "globalState"; isMut: false; isSigner: false },
+        { name: "workspace"; isMut: false; isSigner: false },
+        { name: "auditorAssignment"; isMut: false; isSigner: false },
+        { name: "document"; isMut: true; isSigner: false },
+        { name: "uploader"; isMut: true; isSigner: true },
+        { name: "systemProgram"; isMut: false; isSigner: false }
+      ];
+      args: [
+        { name: "fileHash"; type: { array: ["u8", 32] } },
+        { name: "fileCid"; type: "string" },
+        { name: "category"; type: "u8" },
+        { name: "visibility"; type: "u8" }
+      ];
+    },
+    {
+      name: "acknowledgeDocument";
+      accounts: [
+        { name: "workspace"; isMut: false; isSigner: false },
+        { name: "document"; isMut: true; isSigner: false },
+        { name: "admin"; isMut: true; isSigner: true }
+      ];
+      args: [];
+    },
+    {
+      name: "flagDocument";
+      accounts: [
+        { name: "globalState"; isMut: false; isSigner: false },
+        { name: "document"; isMut: true; isSigner: false },
+        { name: "superadmin"; isMut: true; isSigner: true }
+      ];
+      args: [];
     }
   ];
-  errors: [
-    { code: 6000; name: "InvalidIndustry"; msg: "Invalid industry value." },
-    { code: 6001; name: "InvalidRole"; msg: "Invalid role value." }
-  ];
+  accounts: [];
+  errors: [];
 };
 
-export const IDL: AuditorumProtocol = {
-  version: "0.1.0",
+export const IDL: AuditorumProtocol | any = {
+  address: "6Xz5kQtfcSUf9tjgHWFqA9rMaNEdwY14AWsLdJQkuau7",
+  metadata: {
+    address: "6Xz5kQtfcSUf9tjgHWFqA9rMaNEdwY14AWsLdJQkuau7",
+  },
+  version: "0.2.0",
   name: "auditorum_protocol",
   instructions: [
     {
-      name: "createAuditRecord",
+      name: "initialize",
       accounts: [
-        { name: "auditRecord", isMut: true, isSigner: false },
-        { name: "authority", isMut: true, isSigner: true },
+        { name: "globalState", isMut: true, isSigner: false },
+        { name: "signer", isMut: true, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+      ],
+      args: [],
+    },
+    {
+      name: "createWorkspace",
+      accounts: [
+        { name: "globalState", isMut: true, isSigner: false },
+        { name: "workspace", isMut: true, isSigner: false },
+        { name: "admin", isMut: true, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+      ],
+      args: [{ name: "companyName", type: "string" }],
+    },
+    {
+      name: "assignAuditor",
+      accounts: [
+        { name: "globalState", isMut: false, isSigner: false },
+        { name: "workspace", isMut: false, isSigner: false },
+        { name: "auditorAssignment", isMut: true, isSigner: false },
+        { name: "admin", isMut: true, isSigner: true },
+        { name: "auditor", isMut: false, isSigner: false },
         { name: "systemProgram", isMut: false, isSigner: false },
       ],
       args: [
-        { name: "hash", type: { array: ["u8", 32] } },
-        { name: "industry", type: "u8" },
-        { name: "role", type: "u8" },
+        { name: "firmPubkey", type: "publicKey" },
+        { name: "expiry", type: "i64" },
       ],
     },
-  ],
-  accounts: [
     {
-      name: "AuditRecord",
-      type: {
-        kind: "struct",
-        fields: [
-          { name: "authority", type: "publicKey" },
-          { name: "hash", type: { array: ["u8", 32] } },
-          { name: "industry", type: "u8" },
-          { name: "role", type: "u8" },
-          { name: "createdAt", type: "i64" },
-          { name: "bump", type: "u8" },
-        ],
-      },
+      name: "uploadDocument",
+      accounts: [
+        { name: "globalState", isMut: false, isSigner: false },
+        { name: "workspace", isMut: false, isSigner: false },
+        { name: "auditorAssignment", isMut: false, isSigner: false, isOptional: true },
+        { name: "document", isMut: true, isSigner: false },
+        { name: "uploader", isMut: true, isSigner: true },
+        { name: "systemProgram", isMut: false, isSigner: false },
+      ],
+      args: [
+        { name: "fileHash", type: { array: ["u8", 32] } },
+        { name: "fileCid", type: "string" },
+        { name: "category", type: "u8" },
+        { name: "visibility", type: "u8" },
+      ],
+    },
+    {
+      name: "acknowledgeDocument",
+      accounts: [
+        { name: "workspace", isMut: false, isSigner: false },
+        { name: "document", isMut: true, isSigner: false },
+        { name: "admin", isMut: true, isSigner: true },
+      ],
+      args: [],
+    },
+    {
+      name: "flagDocument",
+      accounts: [
+        { name: "globalState", isMut: false, isSigner: false },
+        { name: "document", isMut: true, isSigner: false },
+        { name: "superadmin", isMut: true, isSigner: true },
+      ],
+      args: [],
     },
   ],
-  errors: [
-    { code: 6000, name: "InvalidIndustry", msg: "Invalid industry value." },
-    { code: 6001, name: "InvalidRole", msg: "Invalid role value." },
-  ],
+  accounts: [],
+  errors: [],
 };
+export default IDL;

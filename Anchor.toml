@@ -1,11 +1,11 @@
 [toolchain]
 
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.devnet]
-auditorum_protocol = "AUDTRMxKvMbFCPn3KhUmD9FwPsAqkJx2RMwUG8gu4wnc"
+auditorum_protocol = "2Vp8UoxngxFcGZi8iFd8SpQYhyfniANvBt7w2srE8Y6o"
 
 [registry]
 url = "https://api.apr.dev"

@@ -1,67 +1,42 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
 export async function middleware(request: NextRequest) {
-  // Skip auth checks if Supabase is not configured
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const token = request.cookies.get("session")?.value;
+  let wallet = null;
 
-  if (!supabaseUrl || !supabaseKey) {
-    // Supabase not configured — allow all requests through
-    return NextResponse.next();
+  if (token) {
+    try {
+      const secret = new TextEncoder().encode(
+        process.env.JWT_SECRET || "default_super_secret_key_change_me_in_production"
+      );
+      const { payload } = await jwtVerify(token, secret);
+      wallet = payload.wallet;
+    } catch (err) {
+      // Invalid or expired token
+    }
   }
 
-  let response = NextResponse.next({
-    request: { headers: request.headers },
-  });
+  // Protect all dashboard routes
+  const isDashboardRoute =
+    request.nextUrl.pathname.startsWith("/workspace") ||
+    request.nextUrl.pathname.startsWith("/auditor") ||
+    request.nextUrl.pathname.startsWith("/admin");
 
-  const supabase = createServerClient(supabaseUrl, supabaseKey, {
-    cookies: {
-      get(name: string) {
-        return request.cookies.get(name)?.value;
-      },
-      set(name: string, value: string, options: CookieOptions) {
-        request.cookies.set({ name, value, ...options });
-        response = NextResponse.next({
-          request: { headers: request.headers },
-        });
-        response.cookies.set({ name, value, ...options });
-      },
-      remove(name: string, options: CookieOptions) {
-        request.cookies.set({ name, value: "", ...options });
-        response = NextResponse.next({
-          request: { headers: request.headers },
-        });
-        response.cookies.set({ name, value: "", ...options });
-      },
-    },
-  });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Protect dashboard routes
-  if (request.nextUrl.pathname.startsWith("/workspace") && !user) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-  if (request.nextUrl.pathname.startsWith("/auditor") && !user) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-  if (request.nextUrl.pathname.startsWith("/admin") && !user) {
+  if (isDashboardRoute && !wallet) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Redirect logged-in users away from auth pages
-  if (
-    user &&
-    (request.nextUrl.pathname === "/login" ||
-      request.nextUrl.pathname === "/register")
-  ) {
+  const isAuthPage =
+    request.nextUrl.pathname === "/login" ||
+    request.nextUrl.pathname === "/register";
+
+  if (wallet && isAuthPage) {
     return NextResponse.redirect(new URL("/workspace", request.url));
   }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {

@@ -1,151 +1,273 @@
 import {
   Connection,
   PublicKey,
-  SystemProgram,
-  TransactionInstruction,
   Transaction,
+  SystemProgram,
 } from "@solana/web3.js";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
-import { PROGRAM_ID, CLUSTER_URL } from "./constants";
+import * as anchor from "@coral-xyz/anchor";
+import { CLUSTER_URL, PROGRAM_ID } from "./constants";
+import IDL from "../idl";
 
-// ============================================================
-// PDA derivation
-// ============================================================
+// ==========================================
+// Anchor Context & Provider
+// ==========================================
 
-export function getAuditRecordPDA(hash: Uint8Array): [PublicKey, number] {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("audit_record"), Buffer.from(hash)],
-    PROGRAM_ID
-  );
-}
-
-// ============================================================
-// Anchor discriminator
-// SHA-256("global:<ix_name>")[..8]
-// ============================================================
-
-async function getInstructionDiscriminator(
-  ixName: string
-): Promise<Uint8Array> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(`global:${ixName}`);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return new Uint8Array(hashBuffer).slice(0, 8);
-}
-
-// ============================================================
-// Instruction: create_audit_record
-// ============================================================
-
-function encodeCreateAuditRecordData(
-  discriminator: Uint8Array,
-  hash: Uint8Array,
-  industry: number,
-  role: number
-): Buffer {
-  const buffer = Buffer.alloc(8 + 32 + 1 + 1);
-  buffer.set(discriminator, 0);
-  buffer.set(hash, 8);
-  buffer.writeUInt8(industry, 40);
-  buffer.writeUInt8(role, 41);
-  return buffer;
-}
-
-export async function createAuditRecord(
-  wallet: AnchorWallet,
-  hash: Uint8Array,
-  industry: number,
-  role: number
-): Promise<string> {
+export const getProvider = (wallet: AnchorWallet) => {
   const connection = new Connection(CLUSTER_URL, "confirmed");
-  const [auditRecordPDA] = getAuditRecordPDA(hash);
-
-  const discriminator = await getInstructionDiscriminator("create_audit_record");
-  const data = encodeCreateAuditRecordData(discriminator, hash, industry, role);
-
-  const instruction = new TransactionInstruction({
-    keys: [
-      { pubkey: auditRecordPDA, isSigner: false, isWritable: true },
-      { pubkey: wallet.publicKey, isSigner: true, isWritable: true },
-      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-    ],
-    programId: PROGRAM_ID,
-    data,
+  return new anchor.AnchorProvider(connection, wallet, {
+    preflightCommitment: "confirmed",
   });
+};
 
-  const transaction = new Transaction().add(instruction);
-  transaction.feePayer = wallet.publicKey;
+export const getProgram = (wallet: AnchorWallet) => {
+  const provider = getProvider(wallet);
+  // Optional chaining or cast since we are using JSON IDL
+  return new anchor.Program(IDL as any, provider) as any;
+};
 
-  const { blockhash } = await connection.getLatestBlockhash("confirmed");
-  transaction.recentBlockhash = blockhash;
+// ==========================================
+// PDAs
+// ==========================================
 
-  const signed = await wallet.signTransaction(transaction);
-  const signature = await connection.sendRawTransaction(signed.serialize());
-  await connection.confirmTransaction(signature, "confirmed");
+export const getGlobalStatePDA = () => {
+  return PublicKey.findProgramAddressSync([Buffer.from("state")], PROGRAM_ID)[0];
+};
 
-  return signature;
+export const getWorkspacePDA = (adminPubkey: PublicKey) => {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("workspace"), adminPubkey.toBuffer()],
+    PROGRAM_ID
+  )[0];
+};
+
+export const getAuditorAssignmentPDA = (
+  workspacePubkey: PublicKey,
+  auditorPubkey: PublicKey
+) => {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("auditor"),
+      workspacePubkey.toBuffer(),
+      auditorPubkey.toBuffer(),
+    ],
+    PROGRAM_ID
+  )[0];
+};
+
+export const getDocumentMetadataPDA = (
+  workspacePubkey: PublicKey,
+  documentHash: Uint8Array
+) => {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("document"), workspacePubkey.toBuffer(), Buffer.from(documentHash)],
+    PROGRAM_ID
+  )[0];
+};
+
+// ==========================================
+// Instructions
+// ==========================================
+
+export async function initializeProtocol(wallet: AnchorWallet) {
+  const program = getProgram(wallet);
+  const statePda = getGlobalStatePDA();
+
+  const tx = await program.methods
+    .initialize()
+    .accounts({
+      globalState: statePda,
+      signer: wallet.publicKey,
+      systemProgram: SystemProgram.programId,
+    })
+    .rpc();
+
+  return tx;
 }
 
-// ============================================================
-// Queries
-// ============================================================
+export async function createWorkspace(wallet: AnchorWallet, companyName: string) {
+  const program = getProgram(wallet);
+  const statePda = getGlobalStatePDA();
+  const workspacePda = getWorkspacePDA(wallet.publicKey);
+
+  const tx = await program.methods
+    .createWorkspace(companyName)
+    .accounts({
+      globalState: statePda,
+      workspace: workspacePda,
+      admin: wallet.publicKey,
+      systemProgram: SystemProgram.programId,
+    })
+    .rpc();
+
+  return tx;
+}
+
+export async function assignAuditor(
+  wallet: AnchorWallet,
+  workspacePubkey: PublicKey,
+  auditorPubkey: PublicKey,
+  firmPubkey: PublicKey,
+  expiry: number
+) {
+  const program = getProgram(wallet);
+  const statePda = getGlobalStatePDA();
+  const assignmentPda = getAuditorAssignmentPDA(workspacePubkey, auditorPubkey);
+
+  const tx = await program.methods
+    .assignAuditor(firmPubkey, new anchor.BN(expiry))
+    .accounts({
+      globalState: statePda,
+      workspace: workspacePubkey,
+      auditorAssignment: assignmentPda,
+      admin: wallet.publicKey,
+      auditor: auditorPubkey,
+      systemProgram: SystemProgram.programId,
+    })
+    .rpc();
+
+  return tx;
+}
+
+export async function uploadDocument(
+  wallet: AnchorWallet,
+  workspacePubkey: PublicKey,
+  documentHash: Uint8Array,
+  fileCid: string,
+  category: number,
+  visibility: number
+) {
+  const program = getProgram(wallet);
+  
+  let isAdmin = false;
+  try {
+    const workspaceData = await (program as any).account.workspace.fetch(workspacePubkey);
+    isAdmin = workspaceData.admin.equals(wallet.publicKey);
+  } catch (e) {
+    console.log("Error fetching workspace or not admin:", e);
+  }
+
+  const statePda = getGlobalStatePDA();
+  const documentPda = getDocumentMetadataPDA(workspacePubkey, documentHash);
+
+  // If user is Admin, they don't have an auditor assignment. Passing an uninitialized PDA 
+  // into an Option<Account> causes Anchor to fail with AccountNotInitialized or _bn on serialization.
+  // We explicitly pass null if they are admin.
+  const assignmentPda = isAdmin ? null : getAuditorAssignmentPDA(workspacePubkey, wallet.publicKey);
+
+  const tx = await program.methods
+    .uploadDocument(Array.from(documentHash), fileCid, category, visibility)
+    .accounts({
+      globalState: statePda,
+      workspace: workspacePubkey,
+      auditorAssignment: assignmentPda,
+      document: documentPda,
+      uploader: wallet.publicKey,
+      systemProgram: SystemProgram.programId,
+    })
+    .rpc();
+
+  return tx;
+}
+
+export async function acknowledgeDocument(
+  wallet: AnchorWallet,
+  workspacePubkey: PublicKey,
+  documentPda: PublicKey
+) {
+  const program = getProgram(wallet);
+
+  const tx = await program.methods
+    .acknowledgeDocument()
+    .accounts({
+      workspace: workspacePubkey,
+      document: documentPda,
+      admin: wallet.publicKey,
+    })
+    .rpc();
+
+  return tx;
+}
+
+export async function flagDocument(
+  wallet: AnchorWallet,
+  documentPda: PublicKey
+) {
+  const program = getProgram(wallet);
+  const statePda = getGlobalStatePDA();
+
+  const tx = await program.methods
+    .flagDocument()
+    .accounts({
+      globalState: statePda,
+      document: documentPda,
+      superadmin: wallet.publicKey,
+    })
+    .rpc();
+
+  return tx;
+}
+
+// ==========================================
+// Public Verification (Read-Only)
+// ==========================================
 
 export interface AuditRecordData {
   authority: PublicKey;
-  hash: number[];
-  industry: number;
+  industry: number; // mapped to category
   role: number;
   isSigned: boolean;
   isFlagged: boolean;
   createdAt: number;
-  bump: number;
 }
 
-export async function fetchAuditRecord(
-  hash: Uint8Array
-): Promise<AuditRecordData | null> {
+export async function fetchAuditRecord(documentHash: Uint8Array): Promise<AuditRecordData | null> {
   const connection = new Connection(CLUSTER_URL, "confirmed");
-  const [pda] = getAuditRecordPDA(hash);
+  const dummyWallet: AnchorWallet = {
+    publicKey: PublicKey.default,
+    signTransaction: async (tx) => tx,
+    signAllTransactions: async (txs) => txs,
+  };
+  const provider = new anchor.AnchorProvider(connection, dummyWallet, {});
+  const program = new anchor.Program(IDL as any, provider) as any;
 
-  const accountInfo = await connection.getAccountInfo(pda);
-  if (!accountInfo) return null;
+  try {
+    const accounts = await program.account.documentMetadata.all([
+      {
+        memcmp: {
+          offset: 8 + 32 + 32, // Discriminator(8) + Uploader(32) + Workspace(32)
+          bytes: anchor.utils.bytes.bs58.encode(documentHash),
+        },
+      },
+    ]);
 
-  const data = accountInfo.data;
-  // Anchor account: 8-byte discriminator + fields
-  // authority(32) + hash(32) + industry(1) + role(1) + is_signed(1) + is_flagged(1) + created_at(8) + bump(1) = 77
-  if (data.length < 8 + 77) return null;
+    if (accounts.length === 0) return null;
 
-  const offset = 8;
-  const authority = new PublicKey(data.slice(offset, offset + 32));
-  const hashBytes = Array.from(data.slice(offset + 32, offset + 64));
-  const industry = data[offset + 64];
-  const role = data[offset + 65];
-  const isSigned = data[offset + 66] === 1;
-  const isFlagged = data[offset + 67] === 1;
-
-  const createdAtLow = data.readUInt32LE(offset + 68);
-  const createdAtHigh = data.readInt32LE(offset + 72);
-  const createdAt = createdAtHigh * 4294967296 + createdAtLow;
-
-  const bump = data[offset + 76];
-
-  return { authority, hash: hashBytes, industry, role, isSigned, isFlagged, createdAt, bump };
+    const doc = accounts[0].account;
+    return {
+      authority: doc.uploader,
+      industry: doc.category,
+      role: 1, // Defaults to 1 for Company uploads in this context
+      isSigned: true, 
+      isFlagged: doc.isFlagged,
+      createdAt: doc.createdAt.toNumber() * 1000,
+    };
+  } catch (err) {
+    console.error("fetchAuditRecord Error:", err);
+    return null;
+  }
 }
 
-// ============================================================
-// Display helpers
-// ============================================================
-
-export function getIndustryLabel(value: number): string {
-  const labels = ["Cybersecurity", "Finance", "Governance"];
-  return labels[value] ?? "Unknown";
+export function getIndustryLabel(val: number) {
+  const map = ["Financial", "Security", "Compliance"];
+  return map[val] || "Unknown";
 }
 
-export function getRoleLabel(value: number): string {
-  const labels = ["Auditor", "Company Admin"];
-  return labels[value] ?? "Unknown";
+export function getRoleLabel(val: number) {
+  const map = ["Auditor", "Company"];
+  return map[val] || "Unknown";
 }
 
-export function formatTimestamp(unixTimestamp: number): string {
-  return new Date(unixTimestamp * 1000).toLocaleString();
+export function formatTimestamp(ts: number) {
+  return new Date(ts).toLocaleString();
 }

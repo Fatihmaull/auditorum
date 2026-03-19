@@ -4,7 +4,7 @@ import { PublicKey } from "@solana/web3.js";
 // Program ID — update after `anchor keys list`
 // ============================================================
 export const PROGRAM_ID = new PublicKey(
-  "AUDTRMxKvMbFCPn3KhUmD9FwPsAqkJx2RMwUG8gu4wnc"
+  "6Xz5kQtfcSUf9tjgHWFqA9rMaNEdwY14AWsLdJQkuau7"
 );
 
 // ============================================================
