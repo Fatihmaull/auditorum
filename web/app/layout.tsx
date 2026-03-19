@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { WalletProvider } from "@/components/providers/WalletProvider";
-import { Navbar } from "@/components/Navbar";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Auditorum Protocol — Trust Infrastructure for Institutional Reports",
-  description:
-    "Verify the authenticity of audit reports using blockchain-based cryptographic proofs. Tamper-proof. Verifiable. Transparent.",
+  title: "Auditorum Protocol",
+  description: "Trust infrastructure for institutional reports. Verify audit reports with cryptographic proofs on Solana.",
 };
 
 export default function RootLayout({
@@ -17,10 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <WalletProvider>
-          <Navbar />
-          <main className="min-h-screen pt-16">{children}</main>
-        </WalletProvider>
+        <WalletProvider>{children}</WalletProvider>
       </body>
     </html>
   );

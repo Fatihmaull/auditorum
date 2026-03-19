@@ -2,42 +2,25 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
-        serif: ["'DM Serif Display'", "Georgia", "serif"],
-        mono: ["'JetBrains Mono'", "'SF Mono'", "'Fira Code'", "monospace"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
       colors: {
-        dark: {
-          DEFAULT: "#060B14",
-          50: "#0C1322",
-          100: "#111927",
-          200: "#1A2332",
+        brand: {
+          50: "#EBF0FA",
+          100: "#C9D7F0",
+          500: "#0B3D91",
+          600: "#092e6e",
+          700: "#081f4a",
         },
-        accent: {
-          DEFAULT: "#4F6EF7",
-          light: "#7B93FB",
-          dark: "#3B54D4",
-        },
-      },
-      animation: {
-        "fade-in": "fadeIn 0.6s ease-out forwards",
-        "slide-up": "slideUp 0.6s ease-out forwards",
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
+        beige: "#EAE3D2",
+        surface: "#FAFAF8",
       },
     },
   },

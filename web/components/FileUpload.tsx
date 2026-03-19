@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, DragEvent, useRef } from "react";
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -10,11 +10,12 @@ interface FileUploadProps {
 
 export function FileUpload({
   onFileSelect,
-  label = "Upload File",
-  accept = "*",
+  label = "Upload a file",
+  accept,
 }: FileUploadProps) {
-  const [dragActive, setDragActive] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback(
     (file: File) => {
@@ -25,9 +26,9 @@ export function FileUpload({
   );
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    (e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
-      setDragActive(false);
+      setIsDragging(false);
       const file = e.dataTransfer.files[0];
       if (file) handleFile(file);
     },
@@ -43,73 +44,51 @@ export function FileUpload({
   );
 
   return (
-    <label
-      className={`group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 transition-all ${
-        dragActive
-          ? "border-accent bg-accent/5"
-          : fileName
-          ? "border-green-500/30 bg-green-500/5"
-          : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
-      }`}
+    <div
       onDragOver={(e) => {
         e.preventDefault();
-        setDragActive(true);
+        setIsDragging(true);
       }}
-      onDragLeave={() => setDragActive(false)}
+      onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
+      onClick={() => inputRef.current?.click()}
+      className={`group cursor-pointer rounded-xl border-2 border-dashed transition-all ${
+        isDragging
+          ? "border-[#0B3D91] bg-blue-50"
+          : fileName
+          ? "border-green-300 bg-green-50"
+          : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+      } px-6 py-10 text-center`}
     >
       <input
+        ref={inputRef}
         type="file"
-        className="hidden"
-        accept={accept}
         onChange={handleChange}
+        accept={accept}
+        className="hidden"
       />
 
       {fileName ? (
         <>
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10 text-green-400">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M20 6 9 17l-5-5" />
-            </svg>
+          <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           </div>
-          <p className="text-sm font-medium text-white">{fileName}</p>
-          <p className="mt-1 text-xs text-white/40">
-            Click or drag to replace
-          </p>
+          <p className="text-sm font-medium text-gray-900">{fileName}</p>
+          <p className="mt-1 text-xs text-gray-400">Click or drag to replace</p>
         </>
       ) : (
         <>
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 text-white/40 transition-colors group-hover:bg-white/10 group-hover:text-white/60">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+          <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 transition-colors group-hover:bg-gray-100">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
           </div>
-          <p className="text-sm font-medium text-white/60">{label}</p>
-          <p className="mt-1 text-xs text-white/30">
-            Drag & drop or click to browse
-          </p>
+          <p className="text-sm font-medium text-gray-600">{label}</p>
+          <p className="mt-1 text-xs text-gray-400">Drag & drop or click to browse</p>
         </>
       )}
-    </label>
+    </div>
   );
 }

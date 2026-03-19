@@ -3,94 +3,162 @@
 @tailwind utilities;
 
 /* ============================================================
-   Design Tokens
+   Auditorum Protocol — Notion-Style Design System
+   ============================================================
+   Primary:   Deep Blue  #0B3D91
+   Secondary: Soft Beige #EAE3D2
+   Neutral:   White / Gray
+   Accent:    Black (typography emphasis)
    ============================================================ */
 
-@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 @layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
-    @apply bg-dark font-sans text-white antialiased;
+    @apply bg-white font-sans text-gray-900 antialiased;
   }
 
   ::selection {
-    @apply bg-accent/30;
+    @apply bg-blue-100;
   }
 
-  /* Override wallet adapter modal styles */
+  /* Wallet adapter overrides */
   .wallet-adapter-modal-wrapper {
-    @apply !bg-dark-50;
+    @apply !bg-white !text-gray-900;
   }
 }
 
 @layer components {
-  /* Shared card style */
-  .card {
-    @apply rounded-2xl border border-white/[0.06] bg-dark-50 p-6;
+  /* ---- Buttons ---- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
   }
 
-  /* Primary button */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-dark transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/10 active:translate-y-0;
+    @apply btn bg-[#0B3D91] text-white hover:bg-[#092e6e] active:bg-[#081f4a];
   }
 
-  /* Secondary button */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium text-white/80 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/[0.08] hover:text-white;
+    @apply btn border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 active:bg-gray-100;
   }
 
-  /* Accent button */
-  .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-dark hover:shadow-lg hover:shadow-accent/20 active:translate-y-0;
+  .btn-ghost {
+    @apply btn text-gray-600 hover:bg-gray-100 active:bg-gray-200;
   }
 
-  /* Badge */
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* ---- Cards ---- */
+  .card {
+    @apply rounded-xl border border-gray-200 bg-white p-6;
+  }
+
+  .card-hover {
+    @apply card transition-shadow hover:shadow-md;
+  }
+
+  /* ---- Badges ---- */
   .badge {
-    @apply inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-xs font-medium text-accent-light;
+    @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium;
   }
 
-  /* Section container */
+  .badge-blue {
+    @apply badge bg-blue-50 text-[#0B3D91];
+  }
+
+  .badge-green {
+    @apply badge bg-green-50 text-green-700;
+  }
+
+  .badge-yellow {
+    @apply badge bg-amber-50 text-amber-700;
+  }
+
+  .badge-red {
+    @apply badge bg-red-50 text-red-700;
+  }
+
+  .badge-gray {
+    @apply badge bg-gray-100 text-gray-600;
+  }
+
+  /* ---- Inputs ---- */
+  .input {
+    @apply w-full rounded-lg border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-[#0B3D91] focus:outline-none focus:ring-1 focus:ring-[#0B3D91] transition-colors;
+  }
+
+  .input-label {
+    @apply mb-1.5 block text-sm font-medium text-gray-700;
+  }
+
+  /* ---- Section ---- */
   .section {
-    @apply mx-auto max-w-5xl px-6;
+    @apply mx-auto max-w-6xl px-6;
   }
 
-  /* Status indicator dot */
-  .status-dot {
+  /* ---- Sidebar ---- */
+  .sidebar-link {
+    @apply flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900;
+  }
+
+  .sidebar-link-active {
+    @apply sidebar-link bg-blue-50 text-[#0B3D91] hover:bg-blue-50;
+  }
+
+  /* ---- Table ---- */
+  .table-header {
+    @apply border-b border-gray-100 bg-gray-50/50 px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500;
+  }
+
+  .table-cell {
+    @apply border-b border-gray-50 px-4 py-3.5 text-sm text-gray-700;
+  }
+
+  /* ---- Status dots ---- */
+  .dot {
     @apply h-2 w-2 rounded-full;
   }
 
-  .status-dot-success {
-    @apply status-dot bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.4)];
+  .dot-green {
+    @apply dot bg-green-500;
   }
 
-  .status-dot-error {
-    @apply status-dot bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.4)];
+  .dot-yellow {
+    @apply dot bg-amber-500;
   }
 
-  .status-dot-pending {
-    @apply status-dot animate-pulse bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)];
+  .dot-red {
+    @apply dot bg-red-500;
   }
-}
 
-/* ============================================================
-   Glow effect
-   ============================================================ */
-.glow {
-  position: relative;
-}
+  .dot-gray {
+    @apply dot bg-gray-400;
+  }
 
-.glow::before {
-  content: "";
-  position: absolute;
-  top: -200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(79, 110, 247, 0.12) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
+  /* ---- Page header ---- */
+  .page-header {
+    @apply mb-8;
+  }
+
+  .page-title {
+    @apply text-2xl font-semibold tracking-tight text-gray-900;
+  }
+
+  .page-description {
+    @apply mt-1 text-sm text-gray-500;
+  }
 }

@@ -8,7 +8,7 @@ import {
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
-import { CLUSTER_URL } from "@/lib/constants";
+import { CLUSTER_URL } from "@/lib/solana/constants";
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
@@ -25,7 +25,7 @@ export const WalletProvider: FC<Props> = ({ children }) => {
   );
 
   return (
-
+    /* @ts-expect-error React 18/19 type mismatch with wallet adapter */
     <ConnectionProvider endpoint={endpoint}>
       <SolanaWalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>{children}</WalletModalProvider>
