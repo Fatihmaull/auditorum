@@ -57,7 +57,7 @@ export default function LoginPage() {
       }
 
       // Success!
-      router.push("/workspace");
+      router.push("/user-dashboard");
       router.refresh();
 
     } catch (err: any) {

@@ -19,13 +19,24 @@ function SessionTracker() {
   const router = useRouter();
 
   useEffect(() => {
+    // Prevent redirect/logout loop on auth pages
+    if (typeof window === "undefined") return;
+    const isAuthPage = window.location.pathname === "/login" || window.location.pathname === "/register";
+    if (isAuthPage) return;
+
     // If we transition to a disconnected state when we aren't connecting
     if (!connected && !connecting) {
-      fetch("/api/auth/logout", { method: "POST" })
-        .then(() => {
-          router.refresh();
-        })
-        .catch(console.error);
+      // Small delay to prevent race condition during navigation
+      const timer = setTimeout(() => {
+        if (!connected && !connecting) {
+          fetch("/api/auth/logout", { method: "POST" })
+            .then(() => {
+              router.refresh();
+            })
+            .catch(console.error);
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
     }
   }, [connected, connecting, router]);
 
@@ -45,6 +56,7 @@ export const WalletProvider: FC<Props> = ({ children }) => {
   );
 
   return (
+    // @ts-expect-error React 18/19 mismatch with Solana provider typedefs
     <ConnectionProvider endpoint={endpoint}>
       <SolanaWalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>

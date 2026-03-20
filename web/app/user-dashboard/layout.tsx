@@ -1,15 +1,15 @@
 "use client";
 
-import { Sidebar } from "@/components/layout/Sidebar";
+import { UserSidebar } from "@/components/layout/UserSidebar";
 
-export default function DashboardLayout({
+export default function UserDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div className="min-h-screen bg-white">
-      <Sidebar />
+      <UserSidebar />
       <div className="pl-60">
         {children}
       </div>

@@ -3,7 +3,8 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export default async function WorkspacePage() {
+export default async function WorkspacePage({ params }: { params: { company_id: string } }) {
+  const { company_id } = params;
   const session = await getSession();
   const supabase = createAdminClient();
 
@@ -69,7 +70,7 @@ export default async function WorkspacePage() {
             Quick Actions
           </h2>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Link href="/workspace/upload" className="card-hover group">
+            <Link href={`/workspace/${company_id}/upload`} className="card-hover group">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#0B3D91] transition-colors group-hover:bg-blue-100">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -92,7 +93,7 @@ export default async function WorkspacePage() {
               <p className="mt-0.5 text-xs text-gray-500">Check IPFS payload vs On-Chain Hash</p>
             </Link>
 
-            <Link href="/workspace/members" className="card-hover group">
+            <Link href={`/workspace/${company_id}/members`} className="card-hover group">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50 text-purple-700 transition-colors group-hover:bg-purple-100">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />

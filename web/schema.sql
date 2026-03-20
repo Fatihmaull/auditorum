@@ -10,6 +10,10 @@ CREATE TYPE doc_visibility AS ENUM ('public', 'internal', 'restricted');
 -- In V2, wallets are the source of truth. No passwords.
 CREATE TABLE users (
   wallet_address TEXT PRIMARY KEY,
+  full_name TEXT,
+  username TEXT UNIQUE,
+  bio TEXT,
+  contact_email TEXT,
   profile_name TEXT,
   avatar_url TEXT,
   nonce TEXT NOT NULL, -- Used for SIWS (Sign-In With Solana)

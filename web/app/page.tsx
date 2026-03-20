@@ -28,9 +28,6 @@ export default function LandingPage() {
             <Link href="/login" className="btn-primary btn-lg">
               Get Started
             </Link>
-            <Link href="/explore" className="btn-secondary btn-lg">
-              Explore Audits
-            </Link>
           </div>
         </div>
       </section>
@@ -50,7 +47,7 @@ export default function LandingPage() {
               {
                 step: "01",
                 title: "Anchor",
-                desc: "Upload your audit report. We hash it with SHA-256 and store the cryptographic proof on Solana — immutably.",
+                desc: "Connect your wallet and upload your report. We hash it and store the cryptographic proof on Solana.",
                 icon: (
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B3D91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
@@ -70,7 +67,7 @@ export default function LandingPage() {
               {
                 step: "03",
                 title: "Verify",
-                desc: "Anyone can re-hash the file and check it against the blockchain. Instant, trustless verification.",
+                desc: "Authorized users can re-hash the file and check it against the blockchain. Secure and identity-first.",
                 icon: (
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B3D91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>
@@ -107,8 +104,8 @@ export default function LandingPage() {
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { title: "Cryptographic Proofs", desc: "SHA-256 hashes anchored on Solana. Immutable and publicly verifiable." },
-              { title: "Instant Verification", desc: "Verify any report in under 3 seconds. No account needed." },
+              { title: "Cryptographic Proofs", desc: "SHA-256 hashes anchored on Solana. Immutable and verifiable." },
+              { title: "Identity-First", desc: "Every action is tied to a verified wallet. No anonymous tampering." },
               { title: "Tamper Detection", desc: "A single byte change produces a completely different hash." },
               { title: "Role-Based Access", desc: "Workspace-level permissions for companies, auditors, and admins." },
               { title: "Auditor Signatures", desc: "Auditors co-sign reports on-chain for additional trust." },

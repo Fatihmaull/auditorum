@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import bs58 from "bs58";
-import { createSession } from "@/lib/auth";
-import { activeNonces } from "../nonce/route";
+import { createSession, activeNonces } from "@/lib/auth";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
   try {
@@ -36,8 +36,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    // In a real app, you would upsert the user to PostgreSQL here
-    // e.g., using Supabase service role
+    // Create or update user in Supabase (Non-blocking for now due to potential permission issues)
+    const supabase = createAdminClient();
+    const { error: upsertError } = await supabase
+      .from("users")
+      .upsert({
+        wallet_address: publicKey,
+        nonce: nonce, // Store the last used nonce
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'wallet_address' });
+
+    if (upsertError) {
+      console.error("Non-blocking upsert error on login:", upsertError);
+      // We still proceed with the session creation so the user can log in
+    }
 
     // Create a local session token
     await createSession({ wallet: publicKey });

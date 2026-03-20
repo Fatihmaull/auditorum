@@ -16,14 +16,8 @@ export function PublicNavbar() {
         </Link>
 
         <div className="flex items-center gap-1">
-          <Link href="/explore" className="btn-ghost btn-sm">
-            Explore
-          </Link>
-          <Link href="/verify" className="btn-ghost btn-sm">
-            Verify
-          </Link>
-          <Link href="/login" className="btn-secondary btn-sm ml-2">
-            Sign in
+          <Link href="/login" className="btn-primary btn-sm ml-2">
+            Enter Dashboard
           </Link>
         </div>
       </div>
