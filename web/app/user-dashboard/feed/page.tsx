@@ -8,11 +8,13 @@ export default async function FeedPage() {
   if (!session?.wallet) redirect("/login");
 
   const supabase = createAdminClient();
-  const { data: logs } = await supabase
+  const { data: dbLogs } = await supabase
     .from("activity_logs")
     .select("*")
-    .eq("actor_pubkey", session.wallet)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(20);
+
+  const logs = dbLogs || [];
 
   return (
     <>
@@ -35,10 +37,17 @@ export default async function FeedPage() {
                   <p className="text-sm font-medium text-gray-900 capitalize">
                     {log.action.replace(/_/g, " ")}
                   </p>
-                  <p className="mt-0.5 text-xs text-gray-500 font-mono">
+                  {log.metadata && (
+                    <div className="mt-1 text-xs text-gray-600">
+                      {log.metadata.file_name && <span className="font-semibold">{log.metadata.file_name}</span>}
+                      {log.metadata.company && <span> for <span className="text-[#0B3D91]">{log.metadata.company}</span></span>}
+                      {log.metadata.auditor && <span>Assigned: <span className="font-semibold">{log.metadata.auditor}</span></span>}
+                    </div>
+                  )}
+                  <p className="mt-1 text-[10px] text-gray-400 font-mono truncate max-w-[200px]">
                     Target: {log.target_pubkey}
                   </p>
-                  <div className="mt-2 text-[10px] text-gray-400">
+                  <div className="mt-1 text-[10px] text-gray-400">
                     {new Date(log.created_at).toLocaleString()}
                   </div>
                 </div>

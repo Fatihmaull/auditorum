@@ -33,54 +33,19 @@ export default async function UserDashboardPage() {
     .select("*, workspaces(*)")
     .ilike("auditor_pubkey", wallet);
 
-  // 4. Fail-safe: Mock assignments if DB is restricted
-  const lWallet = wallet.toLowerCase();
-  // Correct Stripe Admin 1 Lowercase: 3n9ybhpgcnt1sup6hgy5jw8nly8y7rgyacvfkohn4ssj
-  const isStripeAdmin = lWallet === "3n9ybhpgcnt1sup6hgy5jw8nly8y7rgyacvfkohn4ssj";
-  // Correct EY Auditor 1 Lowercase: 8w9vvgyw3tsglnambxfmet2u69gpxeepcdt4uukb5b3p (44 chars)
-  const isEYAuditor = lWallet === "8w9vvgyw3tsglnambxfmet2u69gpxeepcdt4uukb5b3p" || lWallet === "8w9vvygyw3tsglnambxfmet2u69gpxeepcdt4uukb5b3p";
+  const workspacesToDisplay = adminWorkspaces || [];
+  const auditorsToDisplay = auditorRoles || [];
 
-  const mockWorkspaces = isStripeAdmin ? [{
-    pubkey: "15955bda-f671-4c01-8aee-217a077065fd",
-    company_name: "Stripe",
-    admin_pubkey: "3n9ybhpgcnt1sup6hgy5jw8nly8y7rgyacvfkohn4ssj"
-  }] : [];
-
-  const mockAuditorRoles = isEYAuditor ? [{
-    pubkey: "ey-assignment-mock",
-    workspace_pubkey: "cloudflare-mock",
-    auditor_pubkey: lWallet,
-    workspaces: { company_name: "Cloudflare (EY Audit)" }
-  }] : [];
-
-  const workspacesToDisplay = adminWorkspaces && adminWorkspaces.length > 0 ? adminWorkspaces : mockWorkspaces;
-  const auditorsToDisplay = auditorRoles && auditorRoles.length > 0 ? auditorRoles : mockAuditorRoles;
-
-  // 4a. Mock Profile Fail-safe
   let displayProfile = profile;
-  if (!profile && isStripeAdmin) {
-    displayProfile = {
-      wallet_address: wallet,
-      full_name: "Stripe Admin 1",
-      bio: "Protocol Administrator for Stripe B2B enclosure."
-    } as any;
-  } else if (!profile && isEYAuditor) {
-    displayProfile = {
-      wallet_address: wallet,
-      full_name: "EY Auditor 1",
-      bio: "External Security Auditor from Ernst & Young."
-    } as any;
-  }
 
-  // 5. Fetch Global Activity Feed for this wallet
-  const { data: myLogs } = await supabase
+  // 5. Fetch Global Activity Feed (System-wide for dashboard glimpse)
+  const { data: globalLogs } = await supabase
     .from("activity_logs")
     .select("*")
-    .ilike("actor_pubkey", wallet)
     .order("created_at", { ascending: false })
     .limit(5);
 
-  const logs = myLogs || [];
+  const logs = globalLogs || [];
 
   // Default Role
   // 4b. Profile Status Fail-safe
@@ -210,13 +175,19 @@ export default async function UserDashboardPage() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
-                      {log.action.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}
+                    <p className="text-sm font-medium text-gray-900 capitalize leading-none mb-1">
+                      {log.action.replace(/_/g, " ")}
                     </p>
-                    <p className="mt-0.5 text-xs text-gray-500 font-mono">
+                    {log.metadata && (
+                      <p className="text-xs text-gray-600 mb-1">
+                        {log.metadata.file_name && <span className="font-semibold">{log.metadata.file_name}</span>}
+                        {log.metadata.company && <span> for <span className="text-[#0B3D91] font-medium">{log.metadata.company}</span></span>}
+                      </p>
+                    )}
+                    <p className="text-[10px] text-gray-400 font-mono">
                       Target: {log.target_pubkey?.slice(0, 16)}...
                     </p>
-                    <div className="mt-2 text-[10px] text-gray-400">
+                    <div className="mt-1 text-[10px] text-gray-400">
                       {new Date(log.created_at).toLocaleString()}
                     </div>
                   </div>
@@ -224,7 +195,7 @@ export default async function UserDashboardPage() {
                     <a 
                       href={`https://explorer.solana.com/tx/${log.signature}?cluster=devnet`}
                       target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-[10px] uppercase font-bold text-[#0B3D91] bg-blue-50 px-2 py-1 rounded"
+                      className="flex items-center gap-1 text-[10px] uppercase font-bold text-[#0B3D91] bg-blue-100/50 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
                     >
                       On-Chain
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>

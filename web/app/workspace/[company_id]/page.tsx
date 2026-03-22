@@ -13,7 +13,7 @@ export default async function WorkspacePage({ params }: { params: { company_id: 
   const { data: myDocs } = await supabase
     .from("documents")
     .select("*")
-    .eq("uploader_pubkey", session?.wallet || "");
+    .eq("workspace_pubkey", company_id);
 
   const docs = myDocs || [];
   const totalDocs = docs.length;

@@ -1,0 +1,92 @@
+[
+  {
+    "file_name": "2021-tesla-impact-report.pdf",
+    "category": "compliance",
+    "assigned_company": "Stripe",
+    "visibility": "public"
+  },
+  {
+    "file_name": "0001564590-23-000733.pdf",
+    "category": "finance",
+    "assigned_company": "Stripe",
+    "visibility": "internal"
+  },
+  {
+    "file_name": "NIST.CSWP.29.pdf",
+    "category": "security",
+    "assigned_company": "Stripe",
+    "visibility": "restricted"
+  },
+  {
+    "file_name": "2025-Microsoft-Environmental-Sustainability-Report.pdf",
+    "category": "compliance",
+    "assigned_company": "Notion",
+    "visibility": "public"
+  },
+  {
+    "file_name": "AMZN-Q4-2025-Earnings-Release.pdf",
+    "category": "finance",
+    "assigned_company": "Notion",
+    "visibility": "internal"
+  },
+  {
+    "file_name": "OWASP-2021-Ebook.pdf",
+    "category": "security",
+    "assigned_company": "Notion",
+    "visibility": "restricted"
+  },
+  {
+    "file_name": "Apple_Environmental_Progress_Report_2024.pdf",
+    "category": "compliance",
+    "assigned_company": "Cloudflare",
+    "visibility": "public"
+  },
+  {
+    "file_name": "FY24_Q4_Consolidated_Financial_Statements.pdf",
+    "category": "finance",
+    "assigned_company": "Cloudflare",
+    "visibility": "internal"
+  },
+  {
+    "file_name": "OWASP_Testing_Guide_v4.pdf",
+    "category": "security",
+    "assigned_company": "Cloudflare",
+    "visibility": "restricted"
+  },
+  {
+    "file_name": "GRI-standardi-2016.pdf",
+    "category": "compliance",
+    "assigned_company": "Figma",
+    "visibility": "public"
+  },
+  {
+    "file_name": "tsla-20240331-gen.pdf",
+    "category": "finance",
+    "assigned_company": "Figma",
+    "visibility": "internal"
+  },
+  {
+    "file_name": "nistir_7621_r1_draft.pdf",
+    "category": "security",
+    "assigned_company": "Figma",
+    "visibility": "restricted"
+  },
+  {
+    "file_name": "SASB-Conceptual-Framework.pdf",
+    "category": "compliance",
+    "assigned_company": "Datadog",
+    "visibility": "public"
+  },
+  {
+    "file_name": "tsla-20250129-gen.pdf",
+    "category": "finance",
+    "assigned_company": "Datadog",
+    "visibility": "internal"
+  },
+  {
+    "file_name": "nistspecialpublication800-39.pdf",
+    "category": "security",
+    "assigned_company": "Datadog",
+    "visibility": "restricted"
+  }
+]

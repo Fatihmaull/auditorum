@@ -4,7 +4,7 @@ import { PublicKey } from "@solana/web3.js";
 // Program ID — update after `anchor keys list`
 // ============================================================
 export const PROGRAM_ID = new PublicKey(
-  "AUDTRMxKvMbFCPn3KhUmD9FwPsAqkJx2RMwUG8gu4wnc"
+  "2Vp8UoxngxFcGZi8iFd8SpQYhyfniANvBt7w2srE8Y6o"
 );
 
 // ============================================================
@@ -17,12 +17,12 @@ export const CLUSTER_URL =
 export const CLUSTER_NAME = "devnet";
 
 // ============================================================
-// Industry & Role Enums
+// Industry & Role Enums (Matching lib.rs)
 // ============================================================
 export const INDUSTRIES = [
-  { value: 0, label: "Cybersecurity" },
-  { value: 1, label: "Finance" },
-  { value: 2, label: "Governance" },
+  { value: 0, label: "Financial" },
+  { value: 1, label: "Security" },
+  { value: 2, label: "Compliance" },
 ] as const;
 
 export const ROLES = [

@@ -33,3 +33,11 @@ Cargo.lock
 .vscode/
 *.tgz
 *.tsbuildinfo
+
+# Solana Binaries & Local Docs
+solana-release/
+solana-release.tar.bz2
+auditorium-docs/
+web/auditorium-docs/
+web/seeded-results.json
+seeded-results.json
