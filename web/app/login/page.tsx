@@ -69,52 +69,55 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAFAF8] px-4">
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-[#0B3D91] text-lg font-bold text-white shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-dark-900 px-4 overflow-hidden relative">
+      {/* Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px] pointer-events-none" />
+      
+      <div className="w-full max-w-sm rounded-3xl border border-white/5 bg-dark-800/50 p-10 text-center shadow-2xl backdrop-blur-2xl relative z-10">
+        <div className="mx-auto mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-500 text-xl font-black text-white shadow-[0_0_30px_rgba(99,102,241,0.4)]">
           A
         </div>
         
-        <h1 className="text-xl font-semibold text-gray-900">Sign in with Solana</h1>
-        <p className="mt-2 text-sm text-gray-500">
-          Connect your wallet to securely access your workspace. No passwords required.
+        <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Protocol Access</h1>
+        <p className="text-xs text-gray-500 font-medium leading-relaxed uppercase tracking-widest opacity-60">
+          Trustless Authentication via Solana SIWS
         </p>
 
         <div className="mt-8">
           {!publicKey ? (
             <button
               onClick={() => setVisible(true)}
-              className="btn-primary w-full justify-center py-2.5"
+              className="btn-primary w-full py-3.5 text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:scale-[1.02]"
             >
-              Connect Wallet
+              Initialize Identity
             </button>
           ) : (
-            <div className="rounded-lg border border-gray-100 bg-gray-50 p-6 text-center">
+            <div className="rounded-2xl border border-dark-700 bg-dark-900/50 p-8 text-center shadow-inner">
               {status === "signing" && (
                 <>
-                  <div className="mx-auto mb-4 h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-[#0B3D91]" />
-                  <p className="text-sm font-medium text-gray-900">Approve signature</p>
-                  <p className="mt-1 text-xs text-gray-500">Please sign the message in your wallet popup.</p>
+                  <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-dark-700 border-t-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.2)]" />
+                  <p className="text-sm font-bold text-white tracking-wide">Signature Required</p>
+                  <p className="mt-2 text-[10px] text-gray-500 font-medium leading-relaxed uppercase tracking-widest">Awaiting wallet-side attestation</p>
                 </>
               )}
 
               {status === "authenticating" && (
                 <>
-                  <div className="mx-auto mb-4 h-6 w-6 animate-spin rounded-full border-2 border-[#0B3D91] border-t-white" />
-                  <p className="text-sm font-medium text-gray-900">Authenticating...</p>
-                  <p className="mt-1 text-xs text-gray-500">Verifying session token securely.</p>
+                  <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-brand-500 border-t-white shadow-[0_0_15px_rgba(99,102,241,0.4)]" />
+                  <p className="text-sm font-bold text-white tracking-wide">Verifying Proof</p>
+                  <p className="mt-2 text-[10px] text-gray-500 font-medium leading-relaxed uppercase tracking-widest">Cryptographic session generation</p>
                 </>
               )}
 
               {status === "error" && (
                 <>
-                  <div className="mx-auto mb-4 flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b91c1c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-red-500/10 border border-red-500/20 text-red-500">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </div>
-                  <p className="text-sm font-medium text-red-700">Login Failed</p>
-                  <p className="mt-1 text-xs text-gray-600 mb-4">{errorMsg}</p>
-                  <button onClick={() => setVisible(true)} className="btn-secondary w-full justify-center text-xs">
-                    Try Again
+                  <p className="text-sm font-bold text-red-400">Handshake Failed</p>
+                  <p className="mt-2 text-[10px] text-gray-500 mb-6 font-medium leading-relaxed uppercase tracking-widest">{errorMsg}</p>
+                  <button onClick={() => setVisible(true)} className="btn-secondary w-full text-[10px] font-bold uppercase tracking-widest py-3">
+                    Reset Protocol
                   </button>
                 </>
               )}
@@ -122,8 +125,8 @@ export default function LoginPage() {
           )}
         </div>
         
-        <div className="mt-8 text-center text-xs text-gray-400">
-          <p>By connecting, you agree to our Terms of Service.</p>
+        <div className="mt-10 text-center text-[10px] text-gray-600 font-bold uppercase tracking-widest opacity-40">
+          <p>© 2026 Auditorum Protocol</p>
         </div>
       </div>
     </div>

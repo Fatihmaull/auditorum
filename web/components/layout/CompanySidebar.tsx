@@ -91,20 +91,20 @@ export function CompanySidebar({ companyId }: { companyId: string }) {
   ];
 
   return (
-    <aside className="fixed left-0 top-0 z-30 flex h-screen w-60 flex-col border-r border-gray-200 bg-[#FAFAF8]">
+    <aside className="flex h-screen w-60 flex-col border-r border-dark-700 bg-dark-900">
       {/* Logo */}
-      <div className="flex h-14 items-center gap-2 border-b border-gray-100 px-4">
+      <div className="flex h-14 items-center gap-2 border-b border-dark-700 px-4">
         <Link href="/user-dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0B3D91] text-xs font-bold text-white">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-brand-500 text-xs font-bold text-white shadow-[0_0_12px_rgba(99,102,241,0.5)]">
              A
           </div>
-          <span className="text-sm font-semibold text-gray-900">Auditorum</span>
+          <span className="text-sm font-semibold text-white tracking-wide">Auditorum</span>
         </Link>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <div className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+        <div className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
           Workspace
         </div>
         <div className="space-y-0.5">
@@ -124,7 +124,7 @@ export function CompanySidebar({ companyId }: { companyId: string }) {
           ))}
         </div>
 
-        <div className="mb-1 mt-6 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+        <div className="mb-1 mt-6 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
           Public
         </div>
         <div className="space-y-0.5">
@@ -146,8 +146,8 @@ export function CompanySidebar({ companyId }: { companyId: string }) {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-gray-100 px-4 py-3">
-        <p className="text-[10px] text-gray-400">Solana Devnet</p>
+      <div className="border-t border-dark-700 px-4 py-3">
+        <p className="text-[10px] text-gray-500">Solana Devnet</p>
       </div>
     </aside>
   );

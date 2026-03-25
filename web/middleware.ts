@@ -23,7 +23,6 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/workspace") ||
     pathname.startsWith("/auditorplace") ||
     pathname.startsWith("/explore") ||
-    pathname.startsWith("/verify") ||
     pathname.startsWith("/chainadmin") ||
     pathname.startsWith("/superadmin");
 
@@ -154,7 +153,7 @@ export const config = {
     "/workspace/:path*",
     "/auditorplace/:path*",
     "/explore/:path*",
-    "/verify/:path*",
+    "/chainadmin/:path*",
     "/chainadmin/:path*",
     "/superadmin/:path*",
     "/login",

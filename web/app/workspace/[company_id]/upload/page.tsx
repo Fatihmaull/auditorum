@@ -133,7 +133,8 @@ export default function UploadPage() {
     <>
       <TopBar title="Upload Encrypted Report" description="AES-256 encrypted, anchored on-chain." />
 
-      <div className="mx-auto max-w-2xl p-6">
+      <div className="min-h-screen bg-dark-900">
+        <div className="mx-auto max-w-2xl p-6">
         <div className="space-y-6">
           {/* File Selection */}
           <div>
@@ -149,10 +150,10 @@ export default function UploadPage() {
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="input" placeholder="e.g. SOC 2 Type II Report" />
               </div>
 
-              <div className="card bg-gray-50">
-                <p className="mb-1 text-xs font-medium uppercase tracking-wider text-gray-500">Unencrypted SHA-256 Hash</p>
-                <p className="break-all font-mono text-sm text-[#0B3D91]">{hashHex}</p>
-                <p className="mt-2 text-xs text-gray-400">This hash is anchored on-chain for verifiability of the raw file.</p>
+              <div className="rounded-2xl border border-dark-700 bg-dark-800 p-5 shadow-inner">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">Unencrypted SHA-256 Hash Identifier</p>
+                <p className="break-all font-mono text-sm text-neon-blue font-semibold">{hashHex}</p>
+                <p className="mt-3 text-[10px] text-gray-600 font-medium leading-relaxed">This hash is anchored on the Solana blockchain to ensure the mathematical integrity of the raw audit payload.</p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -172,8 +173,9 @@ export default function UploadPage() {
 
               {/* Submit */}
               {!wallet ? (
-                <div className="card border-amber-200 bg-amber-50 text-center">
-                  <p className="text-sm text-amber-700">Connect your wallet to upload.</p>
+                <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-center">
+                  <p className="text-sm font-bold text-amber-400 tracking-wide">Wallet Authentication Required</p>
+                  <p className="text-xs text-amber-500/60 mt-1">Connect your Solana wallet to anchor this document on-chain.</p>
                 </div>
               ) : (
                 <button 
@@ -193,49 +195,53 @@ export default function UploadPage() {
 
           {/* Success UI */}
           {status === "success" && txSig && (
-            <div className="space-y-4">
-              <div className="card border-green-200 bg-green-50">
-                <div className="flex items-center gap-2">
-                  <div className="dot-green" />
-                  <p className="text-sm font-medium text-green-700">Storage and anchoring verified</p>
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" />
+                  <p className="text-sm font-bold text-white tracking-wide uppercase">On-Chain Anchoring Verified</p>
                 </div>
                 
-                <div className="mt-4 space-y-3">
+                <div className="space-y-4">
                   <div>
-                    <p className="text-xs text-gray-500">Solana Transaction</p>
-                    <a href={`https://explorer.solana.com/tx/${txSig}?cluster=${CLUSTER_NAME}`} target="_blank" rel="noopener noreferrer" className="block break-all font-mono text-xs text-[#0B3D91] underline decoration-blue-200">
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 opacity-70">Solana Transaction Signature</p>
+                    <a href={`https://explorer.solana.com/tx/${txSig}?cluster=${CLUSTER_NAME}`} target="_blank" rel="noopener noreferrer" className="block break-all font-mono text-xs text-neon-blue hover:text-white transition-colors underline decoration-brand-500/30">
                       {txSig}
                     </a>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">IPFS CID (Encrypted Blob)</p>
-                    <p className="block break-all font-mono text-xs text-gray-800">{ipfsCid}</p>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 opacity-70">IPFS Decentralized CID (Encrypted Content)</p>
+                    <p className="block break-all font-mono text-xs text-white opacity-80">{ipfsCid}</p>
                   </div>
                 </div>
               </div>
 
               {/* Security Warning: Key Reveal */}
-              <div className="card border-[#0B3D91] border-l-4 rounded-l-none bg-blue-50/50">
-                <p className="text-xs font-bold uppercase tracking-wider text-[#0B3D91]">Secret Decryption Key</p>
-                <p className="mt-1 text-sm text-gray-700">For demonstration purposes, here is the AES-256 decryption key for your file. Save it securely.</p>
-                <code className="mt-3 block p-3 bg-white border border-blue-100 rounded text-xs select-all text-gray-800 break-all">
-                  {decryptionKey}
-                </code>
+              <div className="relative overflow-hidden rounded-2xl border border-brand-500/30 bg-dark-800 p-6 shadow-2xl">
+                <div className="absolute top-0 left-0 w-1 h-full bg-brand-500" />
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-2">Secret Decryption Key</h4>
+                <p className="text-xs text-gray-400 mb-4 leading-relaxed">This key is generated locally and never leaves your browser. You must save it to decrypt this document in the future.</p>
+                <div className="group relative">
+                  <code className="block w-full p-4 bg-dark-900 border border-dark-700 rounded-xl text-xs select-all text-neon-blue break-all font-mono shadow-inner group-hover:border-brand-500/30 transition-colors">
+                    {decryptionKey}
+                  </code>
+                </div>
               </div>
             </div>
           )}
 
           {/* Error */}
           {status === "error" && errorMsg && (
-            <div className="card border-red-200 bg-red-50">
-              <div className="flex items-center gap-2">
-                <div className="dot-red" />
-                <p className="text-sm font-medium text-red-700">Upload failed</p>
+            <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-6 backdrop-blur-md shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
+                <p className="text-sm font-bold text-red-400 tracking-wide uppercase">Protocol Execution Failed</p>
               </div>
-              <p className="mt-2 text-sm text-gray-600">{errorMsg}</p>
+              <p className="text-xs text-gray-400 font-medium leading-relaxed">{errorMsg}</p>
             </div>
           )}
         </div>
+      </div>
       </div>
     </>
   );

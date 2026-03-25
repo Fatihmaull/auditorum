@@ -60,59 +60,59 @@ export function IntelligenceGraph({ workspacePubkey }: { workspacePubkey: string
   }, [workspacePubkey]);
 
   if (loading) {
-    return <div className="h-[600px] w-full flex flex-col items-center justify-center bg-slate-50 text-[#0B3D91] rounded-xl border border-gray-200 animate-pulse font-medium"><svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-[#0B3D91] mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Initializing Auditorum Inter-Document Constellation...</div>;
+    return <div className="h-[600px] w-full flex flex-col items-center justify-center bg-dark-800 text-brand-400 rounded-xl border border-dark-700 animate-pulse font-medium"><svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-neon-blue mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Initializing Auditorum Inter-Document Constellation...</div>;
   }
 
   if (graphData.nodes.length === 0) {
-    return <div className="h-[600px] w-full flex items-center justify-center bg-slate-50 text-gray-500 rounded-xl border border-gray-200">No Intelligence Graph data available yet. Please wait for processing.</div>;
+    return <div className="h-[600px] w-full flex items-center justify-center bg-dark-800 text-gray-500 rounded-xl border border-dark-700">No Intelligence Graph data available yet. Please wait for processing.</div>;
   }
 
   const getNodeColor = (type: string) => {
-    if (type === 'COMPANY') return '#60A5FA'; 
-    if (type === 'DOCUMENT') return '#EAE3D2'; 
-    if (type === 'RISK_LEVEL') return '#EF4444'; 
-    if (type === 'KEYWORD') return '#F59E0B'; 
-    return '#9CA3AF';
+    if (type === 'COMPANY') return '#6366f1'; // brand-500
+    if (type === 'DOCUMENT') return '#38bdf8'; // neon-blue
+    if (type === 'RISK_LEVEL') return '#ef4444'; // red-500
+    if (type === 'KEYWORD') return '#fbbf24'; // amber-400
+    return '#94a3b8'; // slate-400
   };
 
   return (
-    <div ref={containerRef} className="w-full h-[600px] bg-[#041434] rounded-xl overflow-hidden border border-[#0B3D91]/30 shadow-inner relative flex mb-8">
+    <div ref={containerRef} className="w-full h-[600px] bg-dark-900 rounded-xl overflow-hidden border border-dark-700 shadow-2xl relative flex mb-8">
       
-      <div className="absolute top-4 left-4 z-10 bg-[#0B3D91]/90 backdrop-blur-md text-white px-4 py-2 rounded-lg border border-white/10 shadow-lg pointer-events-none">
+      <div className="absolute top-4 left-4 z-10 bg-dark-800/80 backdrop-blur-md text-white px-4 py-2 rounded-lg border border-white/5 shadow-xl pointer-events-none">
          <h3 className="font-bold text-sm tracking-wide flex items-center gap-2">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             Auditorum Intelligence Graph
          </h3>
-         <p className="text-xs text-blue-200 mt-1">Hover over nodes to illuminate connections.</p>
+         <p className="text-xs text-gray-400 mt-1">Hover over nodes to illuminate connections.</p>
       </div>
 
-      <div className="absolute bottom-4 left-4 z-10 bg-[#0B3D91]/90 backdrop-blur-md text-white p-3 rounded-lg border border-white/10 shadow-lg flex flex-col gap-2 text-[10px] font-medium tracking-wide">
-        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#60A5FA]"></div> COMPANY</div>
-        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#EAE3D2]"></div> DOCUMENT</div>
-        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></div> RISK SEVERITY</div>
-        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></div> COMPLIANCE FLAG</div>
+      <div className="absolute bottom-4 left-4 z-10 bg-dark-800/80 backdrop-blur-md text-white p-3 rounded-lg border border-white/5 shadow-xl flex flex-col gap-2 text-[10px] font-medium tracking-wide">
+        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-brand-500"></div> COMPANY</div>
+        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-neon-blue"></div> DOCUMENT</div>
+        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> RISK SEVERITY</div>
+        <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-amber-400"></div> COMPLIANCE FLAG</div>
       </div>
       
       {selectedNode && (
-        <div className="absolute top-4 right-4 z-10 w-64 bg-white text-gray-900 p-4 rounded-lg border border-gray-200 shadow-xl animate-in fade-in">
+        <div className="absolute top-4 right-4 z-10 w-64 bg-dark-800 text-white p-4 rounded-xl border border-dark-600 shadow-2xl animate-in fade-in slide-in-from-right-4">
            <div className="flex justify-between items-start mb-2">
-              <span className="text-[10px] font-bold text-gray-500 uppercase">{selectedNode.type.replace('_', ' ')} NODE</span>
-              <button onClick={() => setSelectedNode(null)} className="text-gray-400 hover:text-gray-800">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{selectedNode.type.replace('_', ' ')} NODE</span>
+              <button onClick={() => setSelectedNode(null)} className="text-gray-500 hover:text-white transition-colors">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
               </button>
            </div>
-           <h3 className="font-semibold text-sm mb-3 border-b border-gray-100 pb-2">{selectedNode.name}</h3>
+           <h3 className="font-semibold text-sm mb-3 border-b border-dark-700 pb-2 text-neon-blue">{selectedNode.name}</h3>
            
-           <div className="text-xs text-gray-600 mb-2">
-             <span className="font-semibold text-[#0B3D91]">System ID:</span> <br/>
-             <span className="font-mono text-[9px] break-all">{selectedNode.id}</span>
+           <div className="text-xs text-gray-400 mb-2">
+             <span className="font-semibold text-brand-400">System ID:</span> <br/>
+             <span className="font-mono text-[9px] break-all opacity-60 text-gray-300">{selectedNode.id}</span>
            </div>
            
-           <p className="text-xs text-gray-500 leading-relaxed bg-gray-50 p-2 rounded mt-3">
-             {selectedNode.type === 'KEYWORD' && "This compliance point impacts multiple linked entities."}
-             {selectedNode.type === 'DOCUMENT' && "This node represents an audited file entity inside your workspace."}
-             {selectedNode.type === 'RISK_LEVEL' && "Severity marker. High density indicates systemic issues."}
-             {selectedNode.type === 'COMPANY' && "The core workspace entity."}
+           <p className="text-xs text-gray-400 leading-relaxed bg-dark-900/50 p-3 rounded-lg mt-3 border border-dark-700">
+             {selectedNode.type === 'KEYWORD' && "This compliance point impacts multiple linked entities across your intelligence constellation."}
+             {selectedNode.type === 'DOCUMENT' && "This node represents an audited file entity inside your workspace anchored on-chain."}
+             {selectedNode.type === 'RISK_LEVEL' && "Severity marker. High concentration in this sector indicates systemic risk."}
+             {selectedNode.type === 'COMPANY' && "The primary workspace entity."}
            </p>
         </div>
       )}
@@ -121,7 +121,7 @@ export function IntelligenceGraph({ workspacePubkey }: { workspacePubkey: string
         width={dimensions.width}
         height={dimensions.height}
         graphData={graphData}
-        backgroundColor="#041434"
+        backgroundColor="#0f1115"
         d3VelocityDecay={0.2}
         
         onNodeHover={(node: any) => setHoverNode(node)}

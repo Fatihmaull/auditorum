@@ -55,150 +55,158 @@ export default async function UserDashboardPage() {
     <>
       <TopBar title="Personal Center" description="Your Global Auditorum Identity" />
 
-      <div className="p-6 max-w-5xl">
+      <div className="p-6 max-w-5xl bg-dark-900 min-h-screen">
         
         {/* Profile Overview */}
-        <div className="card mb-8 p-6 flex items-start gap-6 bg-gradient-to-r from-blue-50 to-white">
-          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-[#0B3D91] text-2xl font-bold shadow-sm">
+        <div className="rounded-3xl border border-white/5 bg-gradient-to-br from-dark-800 to-dark-900 p-8 flex items-start gap-8 shadow-2xl relative overflow-hidden mb-10">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/5 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none" />
+          
+          <div className="flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-3xl bg-brand-500/10 border border-brand-500/20 text-brand-400 text-3xl font-black shadow-[0_0_30px_rgba(99,102,241,0.1)]">
             {profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : "A"}
           </div>
-          <div className="flex-1">
-            <h1 className="text-xl font-bold text-gray-900">
+          <div className="flex-1 relative z-10">
+            <h1 className="text-2xl font-black text-white tracking-tight">
               {displayProfile?.full_name || "Anonymous Wallet"}
             </h1>
-            <p className="text-xs font-mono text-gray-500 mt-1 mb-3">
-              {wallet}
+            <p className="text-[10px] font-mono text-brand-400/60 mt-2 mb-4 uppercase tracking-[0.2em]">
+              {wallet.slice(0, 10)}...{wallet.slice(-10)}
             </p>
-            <p className="text-sm text-gray-700">
-              {displayProfile?.bio || "No professional bio provided yet. Add a description to build your Web3 B2B presence."}
+            <p className="text-sm text-gray-400 font-medium leading-relaxed max-w-2xl">
+              {displayProfile?.bio || "No professional bio provided yet. Enrich your profile to synchronize your Web3 institutional identity."}
             </p>
-            <div className="mt-4 flex gap-2">
-              <Link href="/user-dashboard/profile" className="btn-secondary btn-sm">
-                Edit Profile
+            <div className="mt-6 flex gap-3">
+              <Link href="/user-dashboard/profile" className="btn-primary btn-sm px-6">
+                Refine Identity
               </Link>
             </div>
           </div>
         </div>
 
         {/* Role Access Panel */}
-        <div className="mb-8">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Role Access Panel</h2>
-          <p className="text-sm text-gray-500 mb-4">
-            Select a context to access specific workspaces and role-based capabilities.
-          </p>
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-1 w-1 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+            <h2 className="text-xs font-bold text-gray-400 uppercase tracking-[0.3em]">Protocol Environment</h2>
+          </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Base Role: Public Explorer */}
-            <Link href="/explore" className="card-hover group border-gray-200">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors group-hover:bg-gray-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            <Link href="/explore" className="rounded-3xl border border-white/5 bg-dark-800/40 p-6 shadow-xl backdrop-blur-md transition-all hover:bg-dark-800 hover:border-brand-500/20 group">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-dark-700/50 text-gray-400 border border-white/5 transition-colors group-hover:text-brand-400 group-hover:bg-brand-500/10">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
               </div>
-              <h3 className="text-sm font-medium text-gray-900">Public Explorer</h3>
-              <p className="mt-0.5 text-xs text-gray-500">Search and browse all public audit records.</p>
+              <h3 className="text-sm font-bold text-white mb-1 group-hover:text-brand-400 transition-colors tracking-tight">Public Explorer</h3>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest leading-none">Global Registry Access</p>
             </Link>
 
             {/* Verification Tool */}
-            <Link href="/verify" className="card-hover group border-green-100 bg-green-50/30">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-700 transition-colors group-hover:bg-green-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <Link href="/verify" className="rounded-3xl border border-emerald-500/10 bg-emerald-500/[0.02] p-6 shadow-xl backdrop-blur-md transition-all hover:bg-emerald-500/[0.05] hover:border-emerald-500/20 group">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 transition-colors group-hover:bg-emerald-500/20 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
               </div>
-              <h3 className="text-sm font-medium text-gray-900">Verification Tool</h3>
-              <p className="mt-0.5 text-xs text-green-700">Verify report authenticity via file hash.</p>
+              <h3 className="text-sm font-bold text-white mb-1 tracking-tight">Verification Engine</h3>
+              <p className="text-[10px] text-emerald-500/60 font-bold uppercase tracking-widest leading-none">Validate Report Integrity</p>
             </Link>
 
             {/* Admin Roles */}
             {workspacesToDisplay && workspacesToDisplay.map((ws: any) => (
-              <Link key={ws.pubkey} href={`/workspace/${ws.pubkey}`} className="card-hover group border-blue-100 bg-blue-50/30">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-[#0B3D91] transition-colors group-hover:bg-blue-200">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <Link key={ws.pubkey} href={`/workspace/${ws.pubkey}`} className="rounded-3xl border border-brand-500/10 bg-brand-500/[0.02] p-6 shadow-xl backdrop-blur-md transition-all hover:bg-brand-500/[0.05] hover:border-brand-500/20 group">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 transition-colors group-hover:bg-brand-500/20 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.2)]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
-                <h3 className="text-sm font-medium text-gray-900">Company Admin</h3>
-                <p className="mt-0.5 text-xs text-blue-700">{ws.company_name}</p>
+                <h3 className="text-sm font-bold text-white mb-1 tracking-tight">Corporate Admin</h3>
+                <p className="text-[10px] text-brand-400/60 font-bold uppercase tracking-widest leading-none truncate">{ws.company_name}</p>
               </Link>
             ))}
 
             {/* Auditor Roles */}
             {auditorsToDisplay && auditorsToDisplay.map((role: any) => (
-              <Link key={role.pubkey} href={`/auditorplace/${role.workspace_pubkey}/${wallet}`} className="card-hover group border-purple-100 bg-purple-50/30">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-700 transition-colors group-hover:bg-purple-200">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              <Link key={role.pubkey} href={`/auditorplace/${role.workspace_pubkey}/${wallet}`} className="rounded-3xl border border-purple-500/10 bg-purple-500/[0.02] p-6 shadow-xl backdrop-blur-md transition-all hover:bg-purple-500/[0.05] hover:border-purple-500/20 group">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 transition-colors group-hover:bg-purple-500/20 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                 </div>
-                <h3 className="text-sm font-medium text-gray-900">Assigned Auditor</h3>
-                <p className="mt-0.5 text-xs text-purple-700">{role.workspaces?.company_name}</p>
+                <h3 className="text-sm font-bold text-white mb-1 tracking-tight">Audit Associate</h3>
+                <p className="text-[10px] text-purple-400/60 font-bold uppercase tracking-widest leading-none truncate">{role.workspaces?.company_name}</p>
               </Link>
             ))}
 
             {/* Superadmin Console (Specialized) */}
             {SUPERADMIN_WALLETS.includes(wallet) && (
-              <Link href="/superadmin" className="card-hover group border-red-100 bg-red-50/30">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 text-red-700 transition-colors group-hover:bg-red-200">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+              <Link href="/superadmin" className="rounded-3xl border border-red-500/10 bg-red-500/[0.02] p-6 shadow-xl backdrop-blur-md transition-all hover:bg-red-500/[0.05] hover:border-red-500/20 group">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/10 text-red-500 border border-red-500/20 transition-colors group-hover:bg-red-500/20">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
                 </div>
-                <h3 className="text-sm font-medium text-gray-900">Superadmin Console</h3>
-                <p className="mt-0.5 text-xs text-red-700">Protocol Management & Global Settings</p>
+                <h3 className="text-sm font-bold text-white mb-1 tracking-tight">Protocol Nexus</h3>
+                <p className="text-[10px] text-red-500/60 font-bold uppercase tracking-widest leading-none">Global Network Admin</p>
               </Link>
             )}
 
             {/* Chain Admin Console */}
             {(SUPERADMIN_WALLETS.includes(wallet) || CHAIN_ADMIN_WALLETS.includes(wallet)) && (
-              <Link href="/chainadmin" className="card-hover group border-orange-100 bg-orange-50/30">
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 text-orange-700 transition-colors group-hover:bg-orange-200">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7"/><path d="M16 5V3"/><path d="M8 5V3"/><path d="M3 9h16"/><path d="M21 12l-3 3h-4l-3-3"/></svg>
+              <Link href="/chainadmin" className="rounded-3xl border border-orange-500/10 bg-orange-500/[0.02] p-6 shadow-xl backdrop-blur-md transition-all hover:bg-orange-500/[0.05] hover:border-orange-500/20 group">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/20 transition-colors group-hover:bg-orange-500/20">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7"/><path d="M16 5V3"/><path d="M8 5V3"/><path d="M3 9h16"/><path d="M21 12l-3 3h-4l-3-3"/></svg>
                 </div>
-                <h3 className="text-sm font-medium text-gray-900">Network Admin</h3>
-                <p className="mt-0.5 text-xs text-orange-700">Indexer Status & Node Health</p>
+                <h3 className="text-sm font-bold text-white mb-1 tracking-tight">Chain Custodian</h3>
+                <p className="text-[10px] text-orange-500/60 font-bold uppercase tracking-widest leading-none">Indexer Control</p>
               </Link>
             )}
           </div>
         </div>
 
         {/* Activity Feed */}
-        <div className="mt-4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-gray-900">Global Activity Feed</h2>
-            <Link href="/user-dashboard/feed" className="text-xs font-medium text-[#0B3D91] hover:underline">View All</Link>
+        <div className="mt-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="h-1 w-1 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-[0.3em]">Institutional Pulse</h2>
+            </div>
+            <Link href="/user-dashboard/feed" className="text-[10px] font-bold text-brand-400 hover:text-brand-300 transition-colors uppercase tracking-widest">Global Archive</Link>
           </div>
           
           {logs.length === 0 ? (
-            <div className="card shadow-sm p-8 text-center bg-gray-50 border-gray-100">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              <p className="text-sm text-gray-500">Your global activity feed is empty.</p>
-              <p className="text-xs text-gray-400 mt-1">Actions you take across workspaces will appear here.</p>
+            <div className="rounded-3xl border border-white/5 bg-dark-800/20 p-12 text-center backdrop-blur-md shadow-inner">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-gray-700"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <p className="text-sm font-bold text-gray-600 uppercase tracking-widest">Protocol Idle</p>
+              <p className="text-[10px] text-gray-600 mt-2 font-medium">Global activity feed is awaiting the first indexed event.</p>
             </div>
           ) : (
-            <div className="card divide-y divide-gray-100 p-0 shadow-sm border-gray-200">
+            <div className="rounded-3xl border border-white/5 bg-dark-800/40 divide-y divide-white/5 overflow-hidden shadow-2xl">
               {logs.map((log: any) => (
-                <div key={log.id} className="p-4 flex items-start gap-4 hover:bg-gray-50 transition-colors">
-                  <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#0B3D91]">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <div key={log.id} className="p-6 flex items-start gap-6 hover:bg-white/[0.02] transition-colors group">
+                  <div className="mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)] group-hover:bg-brand-500/20 transition-all">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900 capitalize leading-none mb-1">
+                    <p className="text-sm font-bold text-white uppercase tracking-tight mb-2 transition-colors group-hover:text-brand-400">
                       {log.action.replace(/_/g, " ")}
                     </p>
                     {log.metadata && (
-                      <p className="text-xs text-gray-600 mb-1">
-                        {log.metadata.file_name && <span className="font-semibold">{log.metadata.file_name}</span>}
-                        {log.metadata.company && <span> for <span className="text-[#0B3D91] font-medium">{log.metadata.company}</span></span>}
+                      <p className="text-xs text-gray-500 font-medium mb-2">
+                        {log.metadata.file_name && <span className="text-gray-300">{log.metadata.file_name}</span>}
+                        {log.metadata.company && <span> for <span className="text-brand-400 font-bold">{log.metadata.company}</span></span>}
                       </p>
                     )}
-                    <p className="text-[10px] text-gray-400 font-mono">
-                      Target: {log.target_pubkey?.slice(0, 16)}...
-                    </p>
-                    <div className="mt-1 text-[10px] text-gray-400">
-                      {new Date(log.created_at).toLocaleString()}
+                    <div className="flex items-center gap-4">
+                      <p className="text-[10px] text-gray-600 font-mono tracking-tighter">
+                        OBJ: {log.target_pubkey?.slice(0, 12)}...{log.target_pubkey?.slice(-8)}
+                      </p>
+                      <span className="h-1 w-1 rounded-full bg-dark-600" />
+                      <div className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">
+                        {new Date(log.created_at).toLocaleDateString()}
+                      </div>
                     </div>
                   </div>
                   {log.signature && (
                     <a 
                       href={`https://explorer.solana.com/tx/${log.signature}?cluster=devnet`}
                       target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-[10px] uppercase font-bold text-[#0B3D91] bg-blue-100/50 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
+                      className="flex items-center gap-2 text-[10px] uppercase font-black text-brand-400/80 bg-brand-500/5 border border-brand-500/10 px-3 py-2 rounded-xl hover:bg-brand-500/10 hover:text-brand-400 transition-all"
                     >
                       On-Chain
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                     </a>
                   )}
                 </div>

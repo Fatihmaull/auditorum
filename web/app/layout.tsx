@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark bg-dark-900">
       <body>
         <WalletProvider><>{children}</></WalletProvider>
       </body>
