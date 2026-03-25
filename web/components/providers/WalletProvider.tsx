@@ -56,6 +56,7 @@ export const WalletProvider: FC<Props> = ({ children }) => {
   );
 
   return (
+    // @ts-ignore: Bypasses React 18 FC children type conflict across environments
     <ConnectionProvider endpoint={endpoint}>
       <SolanaWalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
