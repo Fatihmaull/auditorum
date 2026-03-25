@@ -2,6 +2,8 @@ import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ExplorePage() {
   const supabase = createAdminClient();
   const { data: records } = await supabase
