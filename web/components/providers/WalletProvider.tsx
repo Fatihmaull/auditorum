@@ -56,7 +56,6 @@ export const WalletProvider: FC<Props> = ({ children }) => {
   );
 
   return (
-    // @ts-expect-error React 18/19 mismatch with Solana provider typedefs
     <ConnectionProvider endpoint={endpoint}>
       <SolanaWalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
