@@ -1,140 +1,84 @@
-# Auditorum Protocol
+# Auditorum Protocol 🛡️
 
-> Trust infrastructure for institutional reports. Anchor cryptographic proofs on Solana. Verify with math, not authority.
+**The Web3 Trust Intelligence Infrastructure**
 
-## Project Structure
-
-```
-auditorum-init/
-├── programs/auditorum-protocol/  # Anchor smart contract (Rust)
-│   ├── Cargo.toml
-│   └── src/lib.rs
-├── Anchor.toml                   # Anchor config (devnet)
-├── Cargo.toml                    # Rust workspace
-└── web/                          # Next.js frontend
-    ├── app/
-    │   ├── page.tsx              # Landing page
-    │   ├── upload/page.tsx       # Upload + anchor on-chain
-    │   └── verify/page.tsx       # Verify report hash
-    ├── components/
-    ├── lib/
-    ├── package.json
-    └── ...configs
-```
+Auditorum is a next-generation corporate auditing and compliance platform. By merging **Solana Cryptographic Identity (Wallet RBAC)** with high-dimensional **Vector AI Intelligence (Gemini 2.5 + pgvector)**, Auditorum transforms abstract PDF reports into a dynamic, interconnected constellation of systemic risk factors and financial compliance metrics.
 
 ---
 
-## Quick Start — Frontend
+## 🌟 Key Features
 
-```bash
-cd web
-npm install
-npm run dev
-```
+1. **Cryptographic Role-Based Access Control (RBAC)**
+   - Zero-password architecture. All access is inherently bound to asymmetric cryptographic keypairs (Solana Wallets). 
+   - Strict middleware routing isolates multi-tenant workspaces, ensuring confidential corporate documents never cross boundaries unless explicitly authorized.
 
-Open [http://localhost:3000](http://localhost:3000).
+2. **Auditorum AI Pipeline (Gemini 2.5 Flash)**
+   - **Automated Ingestion**: Uploaded PDFs are instantly processed, stripped of boilerplate, and mapped into 3072-dimensional vector embeddings.
+   - **Smart Extraction**: Generates Executive Summaries, Fast Metrics (Revenue, Assets), and flags Critical Compliance risks automatically upon upload.
 
-The frontend connects to **Solana devnet** by default. You can change this in `lib/constants.ts`.
+3. **Inter-Document Intelligence Graph**
+   - A real-time physics-based constellation (Force Graph 2D) rendering across the workspace.
+   - Dynamically links Documents, Risk Severities, and Compliance Flags together, illuminating overlapping structural vulnerabilities across the entire corporate registry.
+   - Features dynamic hover spotlights and just-in-time context rendering to master complex data visually.
 
----
+4. **Workspace AI Copilot (Cross-Document RAG)**
+   - A persistent, Google-Drive-style sliding right-panel agent.
+   - Bypasses traditional single-document chatbots. Users can ask macro-level questions (e.g., "What are our recurring security failures across all 2024 reports?"), and the Copilot instantly synthesizes answers across the entire workspace vector store.
+   - Features **Target Context Pinning** to focus the AI on specific documents via visual attachment pills.
 
-## Smart Contract Deployment (Anchor)
-
-### Prerequisites
-
-1. **Rust** — https://rustup.rs
-2. **Solana CLI** — https://docs.solanalabs.com/cli/install
-3. **Anchor** — https://www.anchor-lang.com/docs/installation
-
-### Steps
-
-```bash
-# 1. Configure Solana CLI for devnet
-solana config set --url devnet
-
-# 2. Create a keypair (if you don't have one)
-solana-keygen new
-
-# 3. Airdrop devnet SOL
-solana airdrop 2
-
-# 4. Build the program
-anchor build
-
-# 5. Get the program ID
-anchor keys list
-# Copy the program ID
-
-# 6. Update the program ID in TWO places:
-#    a. programs/auditorum-protocol/src/lib.rs → declare_id!(...)
-#    b. Anchor.toml → [programs.devnet] section
-
-# 7. Build again with the correct ID
-anchor build
-
-# 8. Deploy to devnet
-anchor deploy
-
-# 9. Update the frontend program ID
-#    web/lib/constants.ts → PROGRAM_ID
-```
-
-### After Deployment
-
-Once deployed, the program ID in `web/lib/constants.ts` must match the deployed program. The frontend will then be able to create and verify audit records on devnet.
+5. **Immutable File Verification**
+   - SHA-256 local hashing and IPFS base32 CIDs guarantee that no document can be silently altered or modified post-audit without failing verification checks.
 
 ---
 
-## How It Works
+## 🎭 End-to-End Roles & Workflows
 
-### Upload Flow
-1. User connects their Solana wallet (Phantom, Solflare)
-2. User uploads an audit report file
-3. Frontend computes SHA-256 hash of the file (client-side, Web Crypto API)
-4. User selects role (Auditor/Company) and industry (Cybersecurity/Finance/Governance)
-5. Frontend creates a `create_audit_record` transaction
-6. Transaction stores the hash at a PDA derived from `["audit_record", hash]`
-7. User receives a transaction signature with Solana Explorer link
+Auditorum is designed for a multi-layered ecosystem, segregating global platform maintenance from confidential corporate administration.
 
-### Verify Flow
-1. User uploads the report file they want to verify (no wallet needed)
-2. Frontend computes SHA-256 hash
-3. Frontend derives the PDA from the hash
-4. Frontend queries Solana for the account at that PDA
-5. If found → **Verified** (shows authority, industry, role, timestamp)
-6. If not found → **Not Found** (report hasn't been anchored)
+### 1. The Superadmin (`Bmk7...`)
+*The ultimate protocol overseer.*
+- **Flow**: Connects wallet -> Enters `/user-dashboard` -> Accesses **Superadmin Console**.
+- **Capabilities**: Views macro-level platform health, live database transaction metrics, API rate limits, and global system activity.
 
-### Smart Contract (Anchor)
-- **Program:** `auditorum_protocol`
-- **Account:** `AuditRecord` (authority, hash, industry, role, created_at, bump)
-- **Instruction:** `create_audit_record(hash, industry, role)`
-- **PDA Seeds:** `["audit_record", hash]` — one record per unique file hash
+### 2. The Chain Admin (`4rUh...`)
+*The network provisioner and system operator.*
+- **Flow**: Connects wallet -> Enters `/user-dashboard` -> Accesses **Network Admin Console**.
+- **Capabilities**: Monitors decentralized indexer node health. Most importantly, the Chain Admin is responsible for **Onboarding New Workspaces**. They provision B2B subscription plans and assign the initial `admin_pubkey` (Company Admin) to a specific corporate wallet.
 
----
+### 3. The Company Admin (e.g., Stripe Admin `3n9y...`)
+*The owner of a specific corporate workspace.*
+- **Flow**: Connects wallet -> Enters `/user-dashboard` -> Selects their specific **Company Admin** workspace routing to `/workspace/[pubkey]`.
+- **Capabilities**: 
+  - Views the macroscopic **Intelligence Graph** for systemic risk clusters.
+  - Uploads new confidential financial/security audits to the workspace.
+  - Speaks with the **Workspace Copilot** to analyze their entire document portfolio natively.
+  - Uses the **Members** tab to invite external, third-party verifiers (Auditors) to inspect their files securely.
 
-## Tech Stack
+### 4. The Assigned Auditor (e.g., EY Associate `8w9V...`)
+*The designated third-party compliance verifier.*
+- **Flow**: Connects wallet -> Enters `/user-dashboard` -> Sees invitations for specific workspaces under the **Assigned Auditor** panel.
+- **Capabilities**: Operates similarly to a Company Admin but restricted strictly to read-only views, validation checklists, and RAG Copilot querying to cross-examine financial statements accurately.
 
-| Layer | Technology |
-|---|---|
-| Smart Contract | Rust + Anchor 0.30.1 |
-| Frontend | Next.js 14 (App Router) + TypeScript |
-| Styling | Tailwind CSS |
-| Wallet | @solana/wallet-adapter (Phantom, Solflare) |
-| Hashing | SHA-256 (Web Crypto API) |
-| Network | Solana Devnet |
+### 5. The Public Explorer (Unauthenticated / General Public)
+*The retail investor or public verifier.*
+- **Flow**: Lands on homepage -> Enters the **Public Explorer** (`/explore`) or **Verification Tool** (`/verify`).
+- **Capabilities**: Can browse exclusively public-facing endpoints (e.g., ESG transparency reports). Can upload any PDF to the Verification tool to instantly check its cryptographic SHA-256 hash against the Auditorum blockchain registry to detect fraud or tampering.
 
 ---
 
-## Environment Variables (Optional)
+## 🛠️ Technology Stack
 
-Create `web/.env.local`:
-
-```env
-NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
-```
+- **Frontend**: Next.js 14 (App Router), React 18, Tailwind CSS v3
+- **Authentication**: Solana Web3.js (Wallet Adapter)
+- **Database & Vector Store**: Supabase (PostgreSQL with `pgvector` & RPC matching)
+- **AI Infrastructure**: Google Gemini (`gemini-2.5-flash` for reasoning, `gemini-embedding-001` for high-dimensional semantic routing)
+- **Visualizations**: React Force Graph 2D (Canvas API)
 
 ---
 
-## License
+## 🚀 Getting Started
 
-MIT
+1. Set your `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `GEMINI_API_KEY` in `.env.local`.
+2. Run `npm install`
+3. Execute `npm run dev`
+4. Connect a Phantom or Backpack wallet mapped to the test framework to enter the ecosystem.
