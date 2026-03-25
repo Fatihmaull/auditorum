@@ -4,10 +4,15 @@ import { activeNonces } from "@/lib/auth";
 
 export async function GET() {
   const nonce = crypto.randomBytes(32).toString("base64");
-  activeNonces.add(nonce);
+  const response = NextResponse.json({ nonce });
   
-  // Clean up nonce after 5 minutes
-  setTimeout(() => activeNonces.delete(nonce), 5 * 60 * 1000);
+  // Store securely in HTTP-only cookie for serverless compatibility
+  response.cookies.set("auth-nonce", nonce, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 5 * 60, // 5 minutes
+  });
 
-  return NextResponse.json({ nonce });
+  return response;
 }
