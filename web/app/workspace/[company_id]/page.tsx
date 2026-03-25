@@ -2,6 +2,8 @@ import { TopBar } from "@/components/layout/TopBar";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { DocumentInsightCard } from "@/components/ai/DocumentInsightCard";
+import { IntelligenceGraph } from "@/components/ai/IntelligenceGraph";
 
 export default async function WorkspacePage({ params }: { params: { company_id: string } }) {
   const { company_id } = params;
@@ -12,8 +14,18 @@ export default async function WorkspacePage({ params }: { params: { company_id: 
   // For the MVP demo, we will query all documents uploaded by this wallet or assigned to this wallet.
   const { data: myDocs } = await supabase
     .from("documents")
-    .select("*")
-    .eq("workspace_pubkey", company_id);
+    .select(`
+      *,
+      document_intelligence (
+        executive_summary,
+        risk_level,
+        risk_score,
+        compliance_flags,
+        fast_metrics
+      )
+    `)
+    .eq("workspace_pubkey", company_id)
+    .order("created_at", { ascending: false });
 
   const docs = myDocs || [];
   const totalDocs = docs.length;
@@ -62,6 +74,11 @@ export default async function WorkspacePage({ params }: { params: { company_id: 
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Intelligence Graph Constellation */}
+        <div className="mt-8">
+           <IntelligenceGraph workspacePubkey={company_id} />
         </div>
 
         {/* Quick actions */}
@@ -127,19 +144,9 @@ export default async function WorkspacePage({ params }: { params: { company_id: 
               </div>
             </div>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2">
-              {docs.slice(0, 4).map((doc: any) => (
-                <div key={doc.pubkey} className="card p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[#0B3D91]">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-gray-900">Document {doc.document_hash.slice(0, 8)}...</p>
-                      <p className="truncate text-xs text-gray-500">IPFS: {doc.file_cid.slice(0, 16)}...</p>
-                    </div>
-                  </div>
-                </div>
+            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+              {docs.map((doc: any) => (
+                <DocumentInsightCard key={doc.pubkey} doc={doc} />
               ))}
             </div>
           )}

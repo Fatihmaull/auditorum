@@ -1,6 +1,7 @@
 "use client";
 
 import { CompanySidebar } from "@/components/layout/CompanySidebar";
+import { WorkspaceCopilot } from "@/components/ai/WorkspaceCopilot";
 
 export default function WorkspaceLayout({
   children,
@@ -15,6 +16,7 @@ export default function WorkspaceLayout({
       <div className="pl-60">
         {children}
       </div>
+      <WorkspaceCopilot workspacePubkey={params.company_id} />
     </div>
   );
 }
